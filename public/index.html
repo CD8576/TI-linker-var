@@ -7,29 +7,12 @@
 </head>
 <body>
   <h1>Send Variables to Your TI-84 Plus CE</h1>
-  
-  <form id="sendForm">
-    <label for="value">Value: </label>
-    <input type="text" id="value" name="value" required>
-    <br>
 
-    <label for="variable">Variable: </label>
-    <input type="text" id="variable" name="variable" required>
-    <br>
-
-    <button type="submit">Send to Calculator</button>
-  </form>
-
-  <p id="status"></p>
-
-  <script>
- ticalc.addEventListener('connect', async calculator => {
- addEventListener('submit', async (e) => {
-       choose();
-      };
-
+<input type="button" value="Start" onclick="Choose();">
+<input type="button" value="Select" onclick="
+  ticalc.addEventListener('connect', async calculator => {
    if ( await calculator.isReady() ) {
-    // Type "HELLO", key values for TI-83/84 Plus taken from
+    // Type `HELLO`, key values for TI-83/84 Plus taken from
     // https://github.com/debrouxl/tilibs/blob/master/libticalcs/trunk/src/keys83p.h
     await calculator.pressKey(0xA1);
     await calculator.pressKey(0x9E);
@@ -54,6 +37,7 @@ try {
   // Handle unsupported or no device selected
   console.error(e);
 }
-  </script>
+  ">
+
 </body>
 </html>
