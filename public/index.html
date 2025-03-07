@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TI-84 Plus CE Variable Sender</title>
+</head>
+<body>
+  <h1>Send Variables to Your TI-84 Plus CE</h1>
+  
+  <form id="sendForm">
+    <label for="value">Value: </label>
+    <input type="text" id="value" name="value" required>
+    <br>
+
+    <label for="variable">Variable: </label>
+    <input type="text" id="variable" name="variable" required>
+    <br>
+
+    <button type="submit">Send to Calculator</button>
+  </form>
+
+  <p id="status"></p>
+
+  <script>
+    document.getElementById('sendForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const value = document.getElementById('value').value;
+      const variable = document.getElementById('variable').value;
+
+      try {
+        const response = await fetch(`/send-variable?value=${value}&variable=${variable}`);
+        const result = await response.text();
+
+        document.getElementById('status').textContent = result;
+      } catch (error) {
+        document.getElementById('status').textContent = 'Error sending data to the calculator.';
+      }
+    });
+  </script>
+</body>
+</html>
