@@ -24,8 +24,11 @@
 
   <script>
  ticalc.addEventListener('connect', async calculator => {
-  choose();
-if ( await calculator.isReady() ) {
+ addEventListener('submit', async (e) => {
+       choose();
+      };
+
+   if ( await calculator.isReady() ) {
     // Type "HELLO", key values for TI-83/84 Plus taken from
     // https://github.com/debrouxl/tilibs/blob/master/libticalcs/trunk/src/keys83p.h
     await calculator.pressKey(0xA1);
