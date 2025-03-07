@@ -23,39 +23,33 @@
   <p id="status"></p>
 
   <script>
-    document.getElementById('sendForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
+ ticalc.addEventListener('connect', async calculator => {
+if ( await calculator.isReady() ) {
+    // Type "HELLO", key values for TI-83/84 Plus taken from
+    // https://github.com/debrouxl/tilibs/blob/master/libticalcs/trunk/src/keys83p.h
+    await calculator.pressKey(0xA1);
+    await calculator.pressKey(0x9E);
+    await calculator.pressKey(0xA5);
+    await calculator.pressKey(0xA5);
+    await calculator.pressKey(0xA8);
 
-      const value = document.getElementById('value').value.trim();
-      const variable = document.getElementById('variable').value.trim();
+    // Get available memory
+    console.log(await calculator.getFreeMem());
+  }
+});
 
-      // Check if the inputs are empty
-      if (!value || !variable) {
-        document.getElementById('status').textContent = 'Please enter both a value and a variable.';
-        return;
-      }
+try {
+  // Initialise the library
+  await ticalc.init();
 
-      // Send data to the backend
-      const formData = new FormData();
-      formData.append('value', value);
-      formData.append('variable', variable);
-
-      try {
-        const response = await fetch('/send-variable', {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (response.ok) {
-          const result = await response.text();
-          document.getElementById('status').textContent = result;
-        } else {
-          document.getElementById('status').textContent = 'Failed to send data to the calculator.';
-        }
-      } catch (error) {
-        document.getElementById('status').textContent = 'Error sending data to the calculator.';
-      }
-    });
+  // Ask user to pick a device. Don't do this on page load, browsers don't like
+  // that, plus `init` may already have fired a `connect` event. Call this
+  // function when the user clicks on a button.
+  await ticalc.choose();
+} catch(e) {
+  // Handle unsupported or no device selected
+  console.error(e);
+}
   </script>
 </body>
 </html>
