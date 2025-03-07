@@ -1,22 +1,24 @@
-# Use a Node.js base image
+# Use Node.js 16 base image
 FROM node:16
 
-# Set the working directory in the container
+# Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Install WebUSB support (optional, if needed for your project)
+# Install necessary dependencies for WebUSB support (if needed)
 RUN apt-get update && apt-get install -y \
     libusb-1.0-0-dev
 
-# Install necessary dependencies for your app
+# Copy package.json and package-lock.json first to optimize caching
 COPY package*.json ./
+
+# Install dependencies defined in package.json
 RUN npm install
 
-# Copy the source code into the container
+# Copy the rest of the source code into the container
 COPY . .
 
-# Expose the port your app will run on (default is 8080)
+# Expose the port the app will run on
 EXPOSE 8080
 
-# Start the app (you'll be running an HTTP server to serve your website)
+# Start the app using the start script in package.json
 CMD ["npm", "start"]
