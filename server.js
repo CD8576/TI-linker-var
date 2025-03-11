@@ -1,30 +1,15 @@
-const express = require('express');
+const express = require("express");
+const path = require("path");
+
 const app = express();
-const port = process.env.PORT || 8080;
+const PORT = 8000;
 
-// Middleware to parse JSON and URL-encoded data
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
 
-// Serve static files if needed (for the HTML, CSS, etc.)
-app.use(express.static('public'));
-
-// Endpoint to send variables to the calculator
-app.post('/send-variable', (req, res) => {
-  const { value, variable } = req.body;
-
-  if (!value || !variable) {
-    return res.status(400).send('Missing value or variable');
-  }
-
-  // Your logic to send the variable to the TI-84 calculator
-  console.log(`Sending value: ${value} to variable: ${variable}`);
-
-  // For now, just send back a success response
-  res.send(`Successfully sent ${value} to ${variable}`);
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });
