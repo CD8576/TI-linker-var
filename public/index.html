@@ -1,25 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TI-84 Plus CE Variable Sender</title>
+<title>Page Title</title>
 </head>
 <body>
-  <h1>Send Variables to Your TI-84 Plus CE</h1>
+  <input type="button" value="Start" onclick="Start();">
+<script type="module">
+ function Start() {
+ 	import TIVarsLib from 'https://raw.githubusercontent.com/adriweb/tivars_lib_cpp/refs/heads/master/TIVarsLib.js';
+    const lib = await TIVarsLib();
+    const prgm = lib.TIVarFile.createNew("Program", "TEST");
+    prgm.setContentFromString("ClrHome:Disp \"Hello World!\"");
+    const filePath = prgm.saveVarToFile("", "MyTestProgram");
+    const file = lib.FS.readFile(filePath, {encoding: 'binary'});   
 
-<input type="button" value="Start" onclick="Choose();">
-<input type="button" value="Select" onclick="
-  ticalc.addEventListener('connect', async calculator => {
-   if ( await calculator.isReady() ) {
-    // Type `HELLO`, key values for TI-83/84 Plus taken from
+	ticalc.addEventListener('connect', async calculator => {
+  if ( await calculator.isReady() ) {
+    // Type "HELLO", key values for TI-83/84 Plus taken from
     // https://github.com/debrouxl/tilibs/blob/master/libticalcs/trunk/src/keys83p.h
     await calculator.pressKey(0xA1);
     await calculator.pressKey(0x9E);
     await calculator.pressKey(0xA5);
     await calculator.pressKey(0xA5);
     await calculator.pressKey(0xA8);
-
+	await calculator.sendFile(file);
+    
     // Get available memory
     console.log(await calculator.getFreeMem());
   }
@@ -36,8 +41,12 @@ try {
 } catch(e) {
   // Handle unsupported or no device selected
   console.error(e);
+};
 }
-  ">
-
+</script>
 </body>
 </html>
+
+
+<input type="button" value="Start" onclick="Start();">
+
