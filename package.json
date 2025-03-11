@@ -1,14 +1,13 @@
 {
-  "name": "ti-84-calculator-web",
+  "name": "ticalc-usb-server",
   "version": "1.0.0",
-  "description": "A web interface to communicate with TI-84 Plus CE calculator using WebUSB",
-  "main": "index.js",
+  "description": "A simple server using ticalc-usb",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.17.1",
-    "ticalc-usb": "^1.0.0",
-    "cors": "^2.8.5"
+    "express": "^4.18.2",
+    "ticalc-usb": "^1.0.0"
   }
 }
