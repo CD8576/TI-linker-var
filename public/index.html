@@ -1,50 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Page Title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TI Calculator Program</title>
 </head>
 <body>
-  <input type="button" value="Start" onclick="Start();">
-<script type="module">
- function Start() {
- 	import TIVarsLib from 'https://raw.githubusercontent.com/adriweb/tivars_lib_cpp/refs/heads/master/TIVarsLib.js';
-    const lib = await TIVarsLib();
-    const prgm = lib.TIVarFile.createNew("Program", "TEST");
-    prgm.setContentFromString("ClrHome:Disp \"Hello World!\"");
-    const filePath = prgm.saveVarToFile("", "MyTestProgram");
-    const file = lib.FS.readFile(filePath, {encoding: 'binary'});   
+    <input type="button" value="Start" onclick="Start();">
 
-	ticalc.addEventListener('connect', async calculator => {
-  if ( await calculator.isReady() ) {
-    // Type "HELLO", key values for TI-83/84 Plus taken from
-    // https://github.com/debrouxl/tilibs/blob/master/libticalcs/trunk/src/keys83p.h
-    await calculator.pressKey(0xA1);
-    await calculator.pressKey(0x9E);
-    await calculator.pressKey(0xA5);
-    await calculator.pressKey(0xA5);
-    await calculator.pressKey(0xA8);
-	await calculator.sendFile(file);
-    
-    // Get available memory
-    console.log(await calculator.getFreeMem());
-  }
-});
+    <script type="module">
+        import TIVarsLib from 'https://cdn.jsdelivr.net/gh/adriweb/tivars_lib_js/TIVarsLib.js';
+        import ticalc from 'https://cdn.jsdelivr.net/npm/ticalc-usb@latest/dist/ticalc-usb.js';
 
-try {
-  // Initialise the library
-  await ticalc.init();
+        async function Start() {
+            try {
+                // Initialize TIVarsLib
+                const lib = await TIVarsLib();
+                const prgm = lib.TIVarFile.createNew("Program", "TEST");
+                prgm.setContentFromString("ClrHome:Disp \"Hello World!\"");
+                
+                // Save file to a virtual file system
+                const filePath = prgm.saveVarToFile("", "MyTestProgram");
+                const file = lib.FS.readFile(filePath, { encoding: 'binary' });
 
-  // Ask user to pick a device. Don't do this on page load, browsers don't like
-  // that, plus `init` may already have fired a `connect` event. Call this
-  // function when the user clicks on a button.
-  await ticalc.choose();
-} catch(e) {
-  // Handle unsupported or no device selected
-  console.error(e);
-};
-}
-</script>
+                // Initialize the calculator connection
+                await ticalc.init();
+
+                // Ask user to pick a device
+                await ticalc.choose();
+
+                ticalc.addEventListener('connect', async calculator => {
+                    if (await calculator.isReady()) {
+                        // Send the file to the calculator
+                        await calculator.sendFile(file);
+                        console.log("File sent successfully!");
+
+                        // Get available memory
+                        console.log("Free Memory:", await calculator.getFreeMem());
+                    }
+                });
+            } catch (e) {
+                console.error("Error:", e);
+            }
+        }
+    </script>
 </body>
 </html>
-
-
