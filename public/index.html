@@ -6,19 +6,19 @@
     <title>TI Calculator Program</title>
 </head>
 <body>
-    <input type="button" value="Start" onclick="Start();">
+    <input type="button" id="startButton" value="Start">
 
     <script type="module">
-        import TIVarsLib from 'https://cdn.jsdelivr.net/gh/adriweb/tivars_lib_js/TIVarsLib.js';
-        import ticalc from 'https://cdn.jsdelivr.net/npm/ticalc-usb@latest/dist/ticalc-usb.js';
+        import TIVarsLib from 'https://raw.githubusercontent.com/adriweb/tivars_lib_cpp/refs/heads/master/TIVarsLib.js';
+        import ticalc from '/ticalc-usb.js'; // Ensure this is served properly
 
-        async function Start() {
+        document.getElementById("startButton").addEventListener("click", async function () {
             try {
                 // Initialize TIVarsLib
                 const lib = await TIVarsLib();
                 const prgm = lib.TIVarFile.createNew("Program", "TEST");
                 prgm.setContentFromString("ClrHome:Disp \"Hello World!\"");
-                
+
                 // Save file to a virtual file system
                 const filePath = prgm.saveVarToFile("", "MyTestProgram");
                 const file = lib.FS.readFile(filePath, { encoding: 'binary' });
@@ -42,7 +42,7 @@
             } catch (e) {
                 console.error("Error:", e);
             }
-        }
+        });
     </script>
 </body>
 </html>
